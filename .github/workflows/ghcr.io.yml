@@ -1,4 +1,4 @@
-name: Build and Push Docker Image to GHCR
+name: 编译后推送到 ghcr.io
 
 on:
   workflow_dispatch:  # 手动触发
