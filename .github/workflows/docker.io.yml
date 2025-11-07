@@ -1,4 +1,4 @@
-name: Build and Push Docker Image
+name: 编译后推送到Docker.io
 
 on:
   workflow_dispatch:  # 仅手动触发
