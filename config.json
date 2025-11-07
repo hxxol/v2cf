@@ -39,7 +39,7 @@
       "sniffing": null
     },
     {
-      "listen": "0.0.0.0",
+      "listen": null,
       "port": 1988,
       "protocol": "vmess",
       "settings": {
@@ -60,6 +60,36 @@
         }
       },
       "tag": "inbound-1988",
+      "sniffing": {
+        "enabled": true,
+        "destOverride": [
+          "http",
+          "tls"
+        ]
+      }
+    },
+    {
+      "listen": null,
+      "port": 443,
+      "protocol": "vmess",
+      "settings": {
+        "clients": [
+          {
+            "id": "e8888f24-9999-7777-ffff-00000ba740aa",
+            "alterId": 0
+          }
+        ],
+        "disableInsecureEncryption": false
+      },
+      "streamSettings": {
+        "network": "ws",
+        "security": "none",
+        "wsSettings": {
+          "path": "/zixuan",
+          "headers": {}
+        }
+      },
+      "tag": "inbound-443",
       "sniffing": {
         "enabled": true,
         "destOverride": [
