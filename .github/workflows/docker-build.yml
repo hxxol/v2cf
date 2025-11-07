@@ -1,7 +1,15 @@
-name: Build and Push Docker Image
+name: Build and Push Docker Image to GHCR
 
 on:
-  workflow_dispatch:  # 仅手动触发
+  workflow_dispatch:  # 手动触发
+
+permissions:
+  contents: read
+  packages: write  # 允许推送 GHCR 镜像
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: hxxol/v2cf  # 你的目标镜像名
 
 jobs:
   build:
@@ -11,16 +19,17 @@ jobs:
       - name: 检出代码
         uses: actions/checkout@v4
 
-      - name: 登录 Docker Hub
+      - name: 登录 GitHub Container Registry
         uses: docker/login-action@v3
         with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: 构建镜像
         run: |
-          docker build -t hxxol/v2cf:latest .
+          docker build -t ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest .
 
       - name: 推送镜像
         run: |
-          docker push hxxol/v2cf:latest
+          docker push ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
