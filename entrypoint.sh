@@ -1,6 +1,12 @@
 #!/bin/bash
 set -e
 
+# 校验 Cloudflare Tunnel Token 是否存在
+if [ -z "$CF_TUNNEL_TOKEN" ]; then
+  echo "[entrypoint] ERROR: CF_TUNNEL_TOKEN environment variable is not set"
+  exit 1
+fi
+
 echo "[entrypoint] 启动 v2ray..."
 v2ray run -c /etc/v2ray/config.json &
 V2RAY_PID=$!
@@ -11,4 +17,7 @@ sleep 2
 echo "[entrypoint] 启动 cloudflared 隧道，转发到 127.0.0.1:1988 ..."
 
 # 运行 cloudflared 并将流量转发到本地 1988 端口
-exec cloudflared tunnel --url http://127.0.0.1:1988 run --token eyJhIjoiOWU0Y2U4YTRhZWQzOTUxN2ZlNTlkNzJmZDI4MjY4OTgiLCJ0IjoiMDc5YzNkOTQtMzgzMi00ZDNhLWE4ZmYtNDEyNTc1OTNiOTc5IiwicyI6Ill6VTJaRGszTlRRdE1EWmhOaTAwTVRobUxXRTFZelV0WTJRNU5qa3haV0V6T0RnMiJ9
+exec cloudflared tunnel \
+  --url tcp://127.0.0.1:1988 \
+  run \
+  --token "$CF_TUNNEL_TOKEN"
